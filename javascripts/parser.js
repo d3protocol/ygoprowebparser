@@ -17,6 +17,7 @@ $(document).ready(function(){
 	var dragImage  = document.getElementById('DragImage');
 	dragImage.style.display = "none";
 	
+	
 	initField();
 	//httpget方式
 	
@@ -25,6 +26,8 @@ $(document).ready(function(){
 		readReplay(result);
 	},"text");
 	
+	$("#source").attr("href", "replay/" + $.getUrlParam('rname')); 
+	$("#parserfile").attr("href", "out/" + $.getUrlParam('rname')); 
 	
 	//本地测试
 	/*
