@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>YGOPro Replay Parser V0.8</title>
+<style>
+body,div,ul,li{ font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0; margin:0; list-style:none}
+.clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+.clearfix {display: inline-block;} 
+* html .clearfix {height: 1%;} 
+.clearfix {display: block;} 
+.clear{clear:both}
+img { vertical-align:middle; border:0}
+
+#upload{ width:450px;margin:20px; padding:5px}
+#moswf{ margin:5px 0}
+.filelist{position:relative; padding:0; margin:5px 0 5px 2px; height:30px;line-height:30px; text-align:center; over-flow:hidden; background-color:#fefefe;width:99%; border:1px #ddd solid}
+.process_bar{height:30px;display:block;position:absolute;left:0; padding:0; margin:0;top:0;line-height:30px; text-align:center;width:0; background-color:#f6f6f6; over-flow:hidden;}
+.info_bar{height:30px;display:block;position:absolute;left:0; padding:0 10px 0 10px; margin:0;top:0;line-height:30px; text-align:left;width:100%; over-flow:hidden;}
+.info_bar span{ color:#00F}
+.info_bar span a { color:#00f; text-decoration:none}
+#fileUploaded{ color:green}
+</style>
+<script type="text/javascript" src="swfupload/swfupload.js"></script>
+<script type="text/javascript" src="swfupload/swfupload.handler.js"></script>
+<script type="text/javascript">
+function StartErrorCallBack(){
+	alert("没有可上传的文件。请先选择文件。");	
+}
+function StartCallBack(){
+	return " 正在上传...";	
+}
+function ProcessCallBack(bytesComplete, bytesTotal){
+	var txt = (bytesComplete/bytesTotal)*100;
+	txt = txt.toFixed(2);
+	return " [" + txt + "%]";
+}
+function FailedCallBack(msg){
+	return " <img src=\"images/wrong.png\" width=\"16\" height=\"16\" /> [" + msg + "]";	
+}
+function QueueErrorCallBack(file,msg,message){
+	var msg1 = "";
+	if(file!=null)msg1=file.name + "\r\n\r\n";
+	alert(msg1+msg);
+}
+function SavingCallBack(){
+	return " <img src=\"images/loading.gif\" width=\"16\" height=\"16\" />";	
+}
+function QueuedCallBack(file){
+	swfu.startUploadFiles();
+	return " 等待上传。[<a href=\"javascript:void(0)\" onclick=\"SWFUpload.instances['" + this.movieName + "'].cancelUpload('" + file.id + "');\">取消</a>]";	
+	
+}
+function CancelledCallBack(id){
+	return " 已取消。[<a href=\"javascript:void(0)\" onclick=\"SWFUpload.instances['" + this.movieName + "'].requeueUpload('" + id + "');\">恢复</a>]";
+}
+function SuccessCallBack(file,serverData){
+	var File = null;
+	eval("File = (" + serverData + ");");
+	if(!File)return"";
+	if(File.err){
+		swfu.uploadError(soc,500,File.msg);
+		return "";
+	}
+	
+	document.getElementById("fileUploaded").innerHTML += "‘" + File.src + "’ 已经上传 ";
+
+	
+	return " <img src=\"images/right.png\" width=\"16\" height=\"16\" /> [<a href ='/parser.html?rname="+File.name+"' target='_blank'>查看解析</a>]";	
+}
+
+var Setting={
+	debug:false,
+	upload_url: "upload.asp",
+	file_post_name : "filedata",
+	file_types : "*.yrp;", //文件格式限制
+	file_types_description : "文件类型", //文件格式描述
+	file_size_limit : "1 MB", // 文件大小限制
+	file_upload_limit : 5, //上传文件总数
+	button_append : "divAddFiles",
+	button_width: 32,
+	button_height: 32,
+	button_image_url:"images/btn.png",
+	button_text: "<span class=\"but\"></span>",
+	button_text_style:".but {color:#ff0000;}",
+	button_text_left_padding: 14,
+	button_text_top_padding: 3,
+	charset: "gbk",
+	auto:false
+};
+var swfu;
+window.onload=function(){swfu=HandlerInit(Setting);};
+</script>
+
+</head>
+<body>
+	<div style="font-size:20px; margin-top:100px;" align="center">YGOPro Replay Parser V0.7</div>
+	<div id="upload" align="center" style="margin:auto;">
+		<div id="btns" style="margin:10px">
+			<span id="divAddFiles"></span>
+		</div>
+		<div id="moswf"></div>
+		<div style="background-color:#FFFFCC; padding:12px; line-height:20px; font-size:14px">说明：这是一个临时版本，<span style="color:red;">TAG暂不支持~</span>，用于测试输出战报的核心逻辑,如果你发现输出有错误或者描述不清的状况，请将地址提供给yuyuhaso(AT)gmail.com便于我们修正错误。</br>同时欢迎有能力的玩家参与到本解析器的开发。
+		</div>
+		<div id="fileUploaded" style="margin-top:10px">Ygo录像解析v0.7 当前支持录像版本:v10300</div>
+	</div>
+	</div>
+	<div id="ad" style="margin:auto;" align="center">
+		<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-9520543693264555";
+			/* YGOad */
+			google_ad_slot = "2745459735";
+			google_ad_width = 468;
+			google_ad_height = 60;
+			//-->
+			</script>
+			<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+	</div>
+</body>
+</html>
